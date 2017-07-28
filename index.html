@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>在线编辑</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="css/button-style.css" />
+    <link rel="stylesheet" type="text/css" href="css/bar-style.css" />
+    <link rel="stylesheet" type="text/css" href="css/color-sticker.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link href= 'css/canvas.css' type="text/css" rel="Stylesheet"/>
+    <link href= 'css/draw.css' type="text/css" rel="Stylesheet"/>
+    <script type="text/javascript" src="script/colorsticker.js"></script>
+    <script type="text/javascript" src='script/draw.js'></script>
+    <script>
+      initdraw();
+    </script>
+  </head>
+  <body>
+    <!-- <input type="button" value="show" onclick="get_editor_content()"/> -->
+    <header class="Navigation_bar">
+        <div class="Navbar-logo-wrapper" onmousemove="show_Setting_dropdown()" onmouseout="hide_Setting_dropdown()">
+          <a class="icon-home-logo" href="" target="_blank" rel="noopener" aria-label="首页"></a>
+        </div>
+        <div class="Navbar-title">
+            <div class="icon-pen-logo"></div>
+            <div class="WriteIndex-pageTitle">写文章</div>
+            <div class="WriteIndex-pageSubTitle">草稿自动保存</div>
+            <div class="WriteIndex-pageSubTitle" id='content_num'>&nbsp;</div>
+        </div>
+        <div class="Navbar-functionality">
+            <div class="regeister"><a href="" onclick="alert('未开通服务')">注册</a></div>
+            <div class="login"><a href="" onclick="alert('未开通服务')">登录</a></div>
+            <div class="icon-article-list" title="存档" onmousemove="show_Menu_dropdown()" onmouseout="hide_Menu_dropdown()">存档</div>
+        </div>
+        <div class="Menu-dropdown" style="visibility: hidden;" onmousemove="show_Menu_dropdown()" onmouseout="hide_Menu_dropdown()">
+          <ul class="Menu-list">
+            <li class="save1">尚未有内容<button onclick="open_cookie(1)">打开</button><button onclick="save_cookie(1)">覆盖</button></li>
+            <li class="save2">尚未有内容<button onclick="open_cookie(2)">打开</button><button onclick="save_cookie(2)">覆盖</button></li>
+            <li class="save3">尚未有内容<button onclick="open_cookie(3)">打开</button><button onclick="save_cookie(3)">覆盖</button></li>
+            <li class="save4"><a href="">登录</a>后将文章保存到云端</li>
+          </ul>
+        </div>
+        <div class="Setting-dropdown" style="visibility: hidden;" onmousemove="show_Setting_dropdown()" onmouseout="hide_Setting_dropdown()">
+            <div class="word-num" onmousemove="show_div('div-word-num')" onmouseout="hide_div('div-word-num')">
+              <li class="icon-word-num" >词数统计</li><div class="div-word-num" style="visibility: hidden;">0</div></div>
+            <div class="senstive-word" onmousemove="show_div('div-senstive-word')" onmouseout="hide_div('div-senstive-word')">
+              <li class="icon-senstive-word">敏感词查询</li>
+              <div class="div-senstive-word" style="visibility: hidden;" >
+                <button onclick="filter_senstive()">查询</button>
+                </div></div>
+            <div class="website"  onmousemove="show_div('div-website')" onmouseout="hide_div('div-website')">
+              <li class="icon-website">常用网站</li>
+              <div class="div-website" style="visibility: hidden; color:#36aadb" >
+                <u>
+                <a onclick="window.open('http://www.baidu.com')">百度</a>
+                  <a onclick="window.open('https://www.google.com.hk/')">谷歌</a>
+                    <a onclick="window.open('https://fanyi.youdao.com/ ')">有道</a>
+                      <a onclick="window.open('http://music.163.com/ ')">音乐</a></u>
+                </div></div>
+            <!-- <div class="unify-punctuation" onmousemove="show_div('div-unify-punctuation')" onmouseout="hide_div('div-unify-punctuation')">
+              <li class="icon-unify-punctuation">标点统一</li>
+              <div class="div-unify-punctuation" style="visibility: hidden;" >
+                <button onclick="unify_panctuation('ch')">中式</button>
+                <button onclick="unify_panctuation('en')">英式</button>
+              </div>
+            </div> 会替换掉便签内的内容，待修改-->
+            <div class="background-color" onmousemove="show_div('div-background-color')" onmouseout="hide_div('div-background-color')">
+              <li class="icon-background-color">背景颜色</li>
+              <div class="div-background-color" style="visibility: hidden;" >
+                <button onclick="set_background_color('#ffffff')" style="background-color:#ffffff;">背景</button>
+                <button onclick="set_background_color('#f1b8b8')" style="background-color:#f1b8b8;">背景</button>
+                <button onclick="set_background_color('#c2f1b8')" style="background-color:#c2f1b8;">背景</button>
+                <button onclick="set_background_color('#b8eff1')" style="background-color:#b8eff1;">背景</button>
+              </div>
+            </div>
+            <div class="night-mode" onmousemove="show_div('div-night-mode')" onmouseout="hide_div('div-night-mode')">
+              <li class="icon-night-mode">夜间模式</li>
+              <div class="div-night-mode" style="visibility: hidden;" >
+                <button onclick="open_night_mode()">开启</button>
+                <button onclick="close_night_mode()">关闭</button>
+              </div>
+            </div>
+        </div>
+    </header>
+    <div class="edit_buttons">
+      <div class="article_tittle">
+        <textarea id="atittle" rows="1" placeholder="请输入标题"></textarea>
+      </div>
+      <div class="quick_set_button">
+        <div class="bold_button"></div>
+        <div class="italic_button"></div>
+        <div class="underline_button"></div>
+        <div class="undo_button"></div>
+        <div class="redo_button"></div>
+        <div class="justifyLeft_button"></div>
+        <div class="justifyRight_button"></div>
+        <div class="justifyCenter_button"></div>
+        <div class="removeFormat_button"></div>
+        <div class="OrderedList_button"></div>
+        <div class="UnorderedList_button"></div>
+        <div class="superscript_button"></div>
+        <div class="subscript_button"></div>
+        <select id="font_name_select" onchange="select_font_name()"  class="font_name_select">
+          <option><font face="SimSun">宋体</font></option>
+          <option><font face="SimHei">黑体</font></option>
+          <option><font face="Microsoft YaHei">微软雅黑</font></option>
+          <option><font face="FangSong">仿宋</font></option>
+          <option><font face="KaiTi">楷体</font></option>
+          <option><font face="Arial">Arial</font></option>
+          <option><font face="Courier New">Courier New</font></option>
+          <option><font face="Impact">Impact</font></option>
+          <option><font face="PmingLiu">PmingLiu</font></option>
+          <option><font face="Times New Roman">Times New Roman</font></option>
+        </select>
+        <select id="font_size_select" onchange="select_font_size()" class="font_size_select">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+        </select>
+      </div>
+    </div>
+    <div class="edit_area">
+      <iframe id="editor" frameborder="0" ></iframe>
+    </div>
+    <!-- 画板部分 -->
+    <div class="sticker-adding-btn2" onclick="document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'" title="打开画图板">
+      D
+    </div>
+    <div id="light" class="white_content">
+      <div id="drawController">
+        <img src = 'images/pencil.png' width = '20px;' height = '20px;' class="img" onclick="draw_graph('pencil',this)" class = 'border_nochoose' title = '铅笔'/><br/>
+        <img src = 'images/line.png' width = '20px;' height = '20px;' class="img" onclick="draw_graph('line',this);" class = 'border_nochoose' title = '画直线'/><br/>
+        <img src = 'images/cancel.png' width = '20px;' height = '20px;' class="img" onclick="cancel(this)" class = 'border_nochoose' title = '撤销上一个操作'/><br/>
+        <img src = 'images/next.png' width = '20px;' height = '20px;' class="img" onclick="next(this)" class = 'border_nochoose' title = '重做上一个操作'/><br/>
+        <input id="chooseColor"  type="button"  class = 'i1 border_nochoose' onclick="showColor(this)" title = '选择颜色'/><br/>
+        <img src = 'images/square.png' width = '20px;' height = '20px;' class="img" onclick="draw_graph('square',this)" class = 'border_nochoose' title = '方形'/><br/>
+        <img src = 'images/circle.png' width = '20px;' height = '20px;' class="img" onclick="draw_graph('circle',this)" class = 'border_nochoose' title = '圆'/><br/>
+        <img src = 'images/handwriting.png' width = '20px;' height = '20px;' class="img" onclick="draw_graph('handwriting',this)" class = 'border_nochoose' title = '涂鸦'/><br/>
+        <img src = 'images/rubber.png' width = '20px;' height = '20px;' class="img" onclick="draw_graph('rubber',this)" class = 'border_nochoose' title = '橡皮擦'/><br/>
+        <img  id="chooseSize" src = 'images/line_size_1.png'  width = '20px;' height = '20px;' class="img" onclick="showLineSize(this)" class = 'border_nochoose' title = '线条大小'/><br/>
+        <img src = 'images/xx.png' width = '20px;' height = '20px;' class="img" onclick="clearContext('1')" class = 'border_nochoose' title = '清屏'/><br/>
+        <a href="#" download="picture.png"  id="downloadImage_a">
+        <img src = 'images/download.png' width = '20px;' height = '20px;' class="img" class = 'border_nochoose' title = '下载' onclick="downloadImage();"/>
+      </a><br/>
+      </div>
+      <div style="float:left;width:30%">
+        <canvas id="canvas"></canvas>
+        <canvas id="canvas_bak"></canvas>
+      </div>
+      <div id="color" class="color" >
+            <input class="i1" type="button"/>
+            <input class="i2" type="button"/>
+            <input class="i3" type="button"/>
+            <input class="i4" type="button"/>
+            <input class="i5" type="button"/>
+            <input class="i6" type="button"/>
+            <input class="i7" type="button"/>
+            <input class="i8" type="button"/>
+            <input class="i9" type="button"/>
+      </div>
+        <div id="line_size"  class = "border_nochoose" style="z-index:99">
+          <img src="images/line_size_1.png" width = '80px;' height = '12px;' onclick="chooseLineSize(1)"><br/>
+          <img src="images/line_size_3.png" width = '80px;' height = '12px;' onclick="chooseLineSize(3)"><br/>
+          <img src="images/line_size_5.png" width = '80px;' height = '12px;' onclick="chooseLineSize(5)"><br/>
+          <img src="images/line_size_7.png" width = '80px;' height = '12px;' onclick="chooseLineSize(7)">
+        </div>
+        <div class="bottom">
+          Draw as you like.
+          </br>
+          Click here to <a href="javascript:void(0)" onclick="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">
+          Close</a>
+        </div>
+      </div>
+      <div id="fade" class="black_overlay">
+      </div>
+      <!-- 便签部分 -->
+      <script type="text/javascript">
+        $('body').sticker({
+          });
+      </script>
+    <!-- <div class="function_buttons">
+        <input type="button" id="fbtn_name" onclick="random_name()" value="随机取名器"/>
+        <input type="button" id="fbtn_senstive" onclick="filter_senstive()" value="敏感词过滤"/>
+        <input type="button" id="fbtn_panctuation" onclick="unify_panctuation()" value="统一标点en"/>
+        <p id="show_info">kk</p>
+    </div> -->
+    </body>
+    <script type="text/javascript" src="script/ebutton.js"></script>
+</html>
